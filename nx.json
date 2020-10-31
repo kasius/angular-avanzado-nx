@@ -22,5 +22,19 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "practica": {
+      "tags": []
+    },
+    "practica-e2e": {
+      "tags": [],
+      "implicitDependencies": ["practica"]
+    },
+    "core-feature-home": {
+      "tags": []
+    },
+    "core-ui": {
+      "tags": []
+    }
+  }
 }

@@ -1,0 +1,25 @@
+<div class="card">
+  <div *ngIf="pais && pais.name" class="card-header">
+    {{pais.name}}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <span class="one">Capital:</span>
+      <b *ngIf="pais && pais.capitalCity" class="pull-right"
+        >{{pais.capitalCity}}</b
+      >
+    </li>
+    <li class="list-group-item">
+      <span class="two">Ubicación</span>
+      <b *ngIf="pais && pais.longitude" class="pull-right"
+        >{{pais.longitude}}/{{pais.latitude}}</b
+      >
+    </li>
+    <li class="list-group-item">
+      <span class="three">Región:</span>
+      <b *ngIf="pais && pais.region" class="pull-right"
+        >{{pais.region.value}}</b
+      >
+    </li>
+  </ul>
+</div>

@@ -1,7 +1,200 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "practica": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/practica",
+      "sourceRoot": "apps/practica/src",
+      "prefix": "practica-curso-avanzado-angular",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/practica",
+            "index": "apps/practica/src/index.html",
+            "main": "apps/practica/src/main.ts",
+            "polyfills": "apps/practica/src/polyfills.ts",
+            "tsConfig": "apps/practica/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/practica/src/favicon.ico",
+              "apps/practica/src/assets"
+            ],
+            "styles": ["apps/practica/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/practica/src/environments/environment.ts",
+                  "with": "apps/practica/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "practica:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "practica:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "practica:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/practica/tsconfig.app.json",
+              "apps/practica/tsconfig.spec.json",
+              "apps/practica/tsconfig.editor.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/practica/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/practica/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "practica-e2e": {
+      "root": "apps/practica-e2e",
+      "sourceRoot": "apps/practica-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/practica-e2e/cypress.json",
+            "tsConfig": "apps/practica-e2e/tsconfig.e2e.json",
+            "devServerTarget": "practica:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "practica:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/practica-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/practica-e2e/**/*"]
+          }
+        }
+      }
+    },
+    "core-feature-home": {
+      "projectType": "library",
+      "root": "libs/core/feature/home",
+      "sourceRoot": "libs/core/feature/home/src",
+      "prefix": "practica-curso-avanzado-angular",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/core/feature/home/tsconfig.lib.json",
+              "libs/core/feature/home/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/core/feature/home/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/core/feature/home/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "core-ui": {
+      "projectType": "library",
+      "root": "libs/core/ui",
+      "sourceRoot": "libs/core/ui/src",
+      "prefix": "practica-curso-avanzado-angular",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/core/ui/tsconfig.lib.json",
+              "libs/core/ui/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/core/ui/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/core/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "practica"
 }

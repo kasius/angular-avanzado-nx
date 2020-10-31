@@ -1,0 +1,223 @@
+<!-- <h1>Loading : {{loading2 | async}}</h1>
+<h1>Loading : {{(bodyList$ | async).length}}</h1> -->
+
+<div class="casrd mb-3" style="min-height: 40vh;">
+  <div *ngIf="heading" class="card-header-tab card-header">
+    <div
+      class="card-header-title font-size-lg text-capitalize font-weight-normal"
+    >
+      <h5 class="menu-header-title text-capitalize text-primary">
+        Header
+      </h5>
+    </div>
+    <div class="btn-actions-pane-right"></div>
+  </div>
+  <form>
+    <div class="table-responsive">
+      <div [style.width.px]="widthContainer">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                *ngFor="let head of (titles$ | async)"
+                [style.width.%]="head.width"
+                [style.max-width.%]="head.width"
+                [style.width.px]="head.widthPx"
+                [style.max-width.px]="head.widthPx"
+                sortable="{{head.sortable}}"
+                (sort)="onSort($event);head.direction = $event.direction"
+                [ngClass]="head.class"
+              >
+                {{head.slug}}
+                <em
+                  *ngIf="head.direction && head.direction === 'desc'"
+                  class="lnr-arrow-up"
+                ></em>
+                <em
+                  *ngIf="head.direction && head.direction === 'asc'"
+                  class="lnr-arrow-down"
+                ></em>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of (bodyList$ | async); let i=index;">
+              <ng-container *ngFor="let head of (titles$ | async)">
+                <ng-container *ngIf="head.type !== 'ICON'">
+                  <td
+                    [ngClass]="head.class"
+                    [title]="head.title === true ? data[head.sortable] : ''"
+                    [style.width.%]="head.width"
+                    [style.max-width.%]="head.width"
+                    [style.width.px]="head.widthPx"
+                    [style.max-width.px]="head.widthPx"
+                  >
+                    <ng-container *ngIf="head.type === 'TEXT'">
+                      <ngb-highlight
+                        (click)="head.onClick ? head.onClick(data) : null"
+                        [ngClass]="{'clickable': head.onClick}"
+                        [result]="data[head.sortable]"
+                        [term]="service.searchTerm"
+                      >
+                      </ngb-highlight>
+                    </ng-container>
+                    <ng-container *ngIf="head.type === 'TEXT_ICON'">
+                      <ng-container *ngFor="let icon of head.options">
+                        <ng-container *ngIf="data[head.sortable] === icon.slug">
+                          <em
+                            [class]="icon.iconClass"
+                            class="text-happy-green"
+                          ></em>
+                          &nbsp;
+                          <ngb-highlight
+                            [result]="data[head.sortable]"
+                            [term]="service.searchTerm"
+                          >
+                          </ngb-highlight>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="head.type === 'HTML'">
+                      <ngb-highlight
+                        [innerHtml]="data[head.sortable]"
+                        [term]="service.searchTerm"
+                      ></ngb-highlight>
+                    </ng-container>
+                    <ng-container *ngIf="head.type === 'DATE'">
+                      <ngb-highlight
+                        [result]="data[head.sortable] | date : 'dd-MM-yyyy HH:mm' : 'ISO'"
+                        [term]="service.searchTerm"
+                      >
+                      </ngb-highlight>
+                    </ng-container>
+                    <ng-container *ngIf="head.type === 'CLICKABLE'">
+                      <ngb-highlight
+                        *ngIf="head.conditional"
+                        [ngClass]="{'clickable': head.onClick && validateConditional(head.conditional, data)}"
+                        [result]="data[head.sortable]"
+                        [term]="service.searchTerm"
+                        (click)="head.onClick && validateConditional(head.conditional, data) ? head.onClick(data) : null"
+                      >
+                      </ngb-highlight>
+                      <ngb-highlight
+                        *ngIf="!head.conditional"
+                        [ngClass]="{'clickable': head.onClick}"
+                        [result]="data[head.sortable]"
+                        [term]="service.searchTerm"
+                        (click)="head.onClick ? head.onClick(data) : null"
+                      >
+                      </ngb-highlight>
+                    </ng-container>
+                    <!-- && head.conditional ? validateConditional(head.conditional, data) : true -->
+                    <ng-container *ngIf="head.type === 'BUTTON'">
+                      <ng-container *ngFor="let button of head.buttons">
+                        <a
+                          *ngIf="(button.link.length > 0 && !button.inlineText) && validateConditional(button.conditional, data)"
+                          [href]="button.link"
+                          class="btn-icon btn-icon-only btn btn-light btn-sm"
+                          [ngClass]="button.class"
+                        >
+                          {{ button.slug }}
+                        </a>
+                        <a
+                          *ngIf="(button.onClick && !button.inlineText) && validateConditional(button.conditional, data)"
+                          (click)="button.onClick(data)"
+                          class="btn"
+                          [ngClass]="button.class"
+                        >
+                          {{ button.slug }}
+                        </a>
+                        <a
+                          *ngIf="(!button.onClick && !(button.link.length > 0) && !button.inlineText) && validateConditional(button.conditional, data)"
+                          class="btn-icon btn-icon-only btn btn-light btn-sm"
+                          [ngClass]="button.class"
+                        >
+                          {{ button.slug }}
+                        </a>
+                        <span
+                          *ngIf="button.inlineText && validateConditional(button.conditional, data)"
+                          >{{ button.slug }}</span
+                        >
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="head.type === 'ICON'">
+                  <td
+                    class="p0 text-center"
+                    [style.width.%]="head.width"
+                    [style.max-width.%]="head.width"
+                    [style.width.px]="head.widthPx"
+                    [style.max-width.px]="head.widthPx"
+                  >
+                    <div
+                      *ngIf="validateConditional(head.conditional, data)"
+                      class="btn-group btn-group-sm mt10"
+                      placement="bottom-right"
+                      ngbDropdown
+                    >
+                      <div
+                        class="btn-group btn-group-sm"
+                        ngbDropdown
+                        placement="bottom-right"
+                      >
+                        <button
+                          type="button"
+                          ngbDropdownToggle
+                          class="btn btn-outline-dark btn-sm"
+                        >
+                          Acciones
+                        </button>
+                        <div ngbDropdownMenu>
+                          <ng-container *ngFor="let action of head.buttons">
+                            <button
+                              *ngIf="action.conditional ? validateConditional(action.conditional, data) : true"
+                              (click)="action.onClick(data)"
+                              class="dropdown-item"
+                            >
+                              <em class="dropdown-icon" [ngClass]="action.icon">
+                              </em
+                              >{{action.slug}}
+                            </button>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card-footer ">
+      <div class="d-flex w-100 justify-content-between">
+        <ngb-pagination
+          *ngIf="footerOption.pagination"
+          [collectionSize]="total$ | async"
+          [(page)]="service.page"
+          [pageSize]="service.pageSize"
+          [maxSize]="5"
+        >
+        </ngb-pagination>
+        <select
+          *ngIf="footerOption.setCount"
+          class="custom-select"
+          style="width: auto;"
+          name="pageSize"
+          [(ngModel)]="service.pageSize"
+        >
+          <option [ngValue]="10">10 registros</option>
+          <option [ngValue]="50">50 registros</option>
+          <option [ngValue]="100">100 registros</option>
+        </select>
+      </div>
+    </div>
+  </form>
+  <core-ui-loading
+    [show]="((bodyList$ | async).length === 0 && search === '') ? true : false"
+  ></core-ui-loading>
+</div>

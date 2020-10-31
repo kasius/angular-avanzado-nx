@@ -15,7 +15,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@practica/ui": ["libs/core/ui/src/index.ts"],
+      "@practica/home": ["libs/core/feature/home/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

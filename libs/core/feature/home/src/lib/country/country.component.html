@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-sm-12 offset-md-8 col-md-4 mb10">
+    <button (click)="location.back();" class="btn btn-sm btn-info pull-right">
+      volver
+    </button>
+  </div>
+  <div *ngIf="pais$ | async as pais" class="col-12">
+    <practica-curso-avanzado-angular-pais-detail
+      [pais]="pais"
+    ></practica-curso-avanzado-angular-pais-detail>
+  </div>
+</div>
