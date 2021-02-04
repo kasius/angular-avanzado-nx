@@ -35,6 +35,13 @@
     },
     "core-ui": {
       "tags": []
+    },
+    "client1": {
+      "tags": []
+    },
+    "client1-e2e": {
+      "tags": [],
+      "implicitDependencies": ["client1"]
     }
   }
 }
